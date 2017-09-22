@@ -40,7 +40,7 @@ Children Class: Screen related vision
 *********************************************************'''        
     
 class Screen(Vision):
-    def __init__(self, name, savefile = 0, filepath = "../database/vision", ext = ".png", region = (-1,-1,-1,-1), log_groups = ["Default"]):
+    def __init__(self, name, savefile = 0, filepath = "../vision", ext = ".png", region = (-1,-1,-1,-1), log_groups = ["Default"]):
         Vision.__init__(self, name, savefile, filepath, ext, region, log_groups)
         self.class_name += ".Screen"
         self.loggings.set_obj_id(self.class_name+"."+name)
