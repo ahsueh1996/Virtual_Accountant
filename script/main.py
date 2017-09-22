@@ -4,6 +4,7 @@ from loggings import *
 
 ''' set up logging:'''
 lgs = get_logging_groups()
+lgs['Default'] = (ECHO,"../log/",None)
 lgs['CV'] = (ECHO,"../log/",None)
 set_logging_groups(lgs)
 ''''''
