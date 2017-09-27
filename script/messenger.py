@@ -88,6 +88,8 @@ class GroupMe_Web(Messenger):
         ui.hotkey('ctrl','a')
         ui.hotkey('ctrl','v')
         ui.hotkey('ctrl','s')
+        ui.hotkey('enter')
+        ui.hotkey('alt','f4')
         # read txt and return only the new_msgs as an array of strings
         data = utils.read_txt('../database/files/$temp.txt')
         new_msgs = data
