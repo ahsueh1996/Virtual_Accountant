@@ -64,6 +64,7 @@ class GroupMe_Web(Messenger):
         # collection
         # focus on message box
         ui.click(self.messages_cent[0],self.messages_cent[1],clicks=1,button='left')
+        time.sleep(self.delay)
         # scroll up at least far enough 2 refreshes (5 pg up keys)
         for i in range(2*5):
             ui.hotkey('pgup')
@@ -89,10 +90,11 @@ class GroupMe_Web(Messenger):
         ui.hotkey('ctrl','s')
         # read txt and return only the new_msgs as an array of strings
         data = utils.read_txt('../database/files/$temp.txt')
+        new_msgs = data
         for i,line in utils.reverse_enumerate(data):
             if line == self.flag_msg and data[i-1] == self.my_username:
+                new_msgs = data[i+1:]
                 break
-        new_msgs = data[i+1:]
         # delete the $temp.txt file for good practice
         utils.cmd_prompt("cd ../database/files & del $temp.txt")
         return new_msgs
