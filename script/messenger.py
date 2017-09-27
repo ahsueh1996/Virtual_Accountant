@@ -67,6 +67,7 @@ class GroupMe_Web(Messenger):
         # scroll up at least far enough 2 refreshes (5 pg up keys)
         for i in range(2*5):
             ui.hotkey('pgup')
+            time.sleep(1)
         # select all and copy
         ui.hotkey('ctrl','a')
         ui.hotkey('ctrl','c')
@@ -85,9 +86,10 @@ class GroupMe_Web(Messenger):
         # just in case it exists, paste over everything
         ui.hotkey('ctrl','a')
         ui.hotkey('ctrl','v')
+        ui.hotkey('ctrl','s')
         # read txt and return only the new_msgs as an array of strings
         data = utils.read_txt('../database/files/$temp.txt')
-        for i,line in utils.reversed_enumerate(data):
+        for i,line in utils.reverse_enumerate(data):
             if line == self.flag_msg and data[i-1] == self.my_username:
                 break
         new_msgs = data[i+1:]
