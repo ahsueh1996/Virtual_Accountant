@@ -82,7 +82,7 @@ class Chrome(Explorer):
     def open(self, query):
         ''' opens a new tab in a new chrome window
         The profile can be selected: Default, Guest, Profile #'''
-        os.system('start chrome --profile-directory="Default"')
+        utils.cmd_prompt('start chrome --profile-directory="Default"')
         # alt: 'start chrome --profile-directory="Default" "<query URL>"'
         time.sleep(2)
         self._search(query)

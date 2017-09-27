@@ -21,18 +21,26 @@ OS
 *********************************************************'''       
 import os
 
+def cmd_prompt(command):
+    os.system(command)
+
 def mkdir(savepath):
     try:
         os.makedirs(savepath)
     except FileExistsError:
         pass
 
-def mktxt(savepath,filename):
+def mktxt(savepath,filename,log=1):
     t = get_str_time()
     mkdir(savepath)
     f = open(savepath+filename,"a+")
-    f.write(">>>>>NEW LOG BEGINS "+t+">>>>>>\n")
+    if log==1:
+        f.write(">>>>>NEW LOG BEGINS "+t+">>>>>>\n")
     return f
+
+def mktxt_notepad(filepath):
+    ''' Focus changes to the notepad'''
+    cmd_prompt("start notepad " + "'" + filepath + "'")
 
 def write_2_file(f,msg):
     t = get_str_time()
@@ -47,13 +55,13 @@ def read_txt(filepath):
     f = open(filepath,"r")
     ret = []
     for line in f:
+        line = line.replace('\n','')
         ret.append(line)
     return ret
 
 def parse_defines(file_array):
     dict = {}
     for line in file_array:
-        line.replace('\n','')
         if not '::' in line:
             continue
         info = line.split('::')
@@ -121,4 +129,4 @@ def reverse_enumerate(iterable):
     """
     Enumerate over an iterable in reverse order while retaining proper indexes
     """
-    return itertools.izip(reversed(xrange(len(iterable))), reversed(iterable))
+    return itertools.zip_longest(reversed(range(len(iterable))), reversed(iterable))
