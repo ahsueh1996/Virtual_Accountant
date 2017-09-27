@@ -21,6 +21,7 @@ class Messenger(Loggable):
     
     def send_msg(self,msg):
         ui.click(self.textbox_cent[0],self.textbox_cent[1],clicks=1,button='left')
+        time.sleep(1)
         ui.typewrite(msg)
         time.sleep(1)
         ui.hotkey('enter')
@@ -78,6 +79,7 @@ class GroupMe_Web(Messenger):
         # make raw txt file with notepad to convert it to ASCII encoding while
         # maintaining the original new line characters
         utils.mktxt_notepad('../database/files/$temp.txt')
+        time.sleep(self.delay)
         # we made sure that this file was not existent before so we expect a create new file prompt from notepad
         ui.hotkey('enter')
         # just in case it exists, paste over everything
