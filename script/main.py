@@ -10,6 +10,5 @@ set_logging_groups(lgs)
 ''''''
 
 screen = Screen("test",savefile=1,log_groups=['Default','CV'])
-screen.loggings.log('hello world')
-screen.sample(utils.get_str_time)
-screen.loggings.log('complete picture sampling')
+img = screen.read_img("../database/programs/groupme_web/test.PNG")
+screen.show_img(img)

@@ -26,6 +26,13 @@ class Vision(Loggable):
     
     def sample(self, savefile = 0, description = ""):
         pass
+    
+    def read_img(self,file):
+        return cv.imread(file)
+    
+    def show_img(self,img,wait=0):
+        cv.imshow('Window',img)
+        cv.waitKey(wait)
 
     def cvtPIL2np(self,im):
         ''' adds 0.01097sec '''
@@ -34,6 +41,48 @@ class Vision(Loggable):
 
     def reset_sample_count(self):
         self.sample_count = 0
+        
+    def filter_bgr(self,im,lb,ub):
+        '''
+        Call this on a nom cat screen capture and it returns a mask of all the obj
+        using color segmentation.
+        '''
+        return cv.inRange(im, lb, ub)
+
+    def filter_hsv(self,im,lb,ub):
+        '''
+        Call this on a nom cat screen capture and it returns a mask of all the obj
+        using hsv color segmentation.
+        '''
+        hsv = cv.cvtColor(im,cv.COLOR_BGR2HSV)
+        return cv.inRange(hsv, lb, ub)
+    
+    def define_contours(self,mask):
+        '''
+        Call this on a mask and we use centroid finding algorithm to localize all
+        objects and return a vector of xy coordinates.
+        '''
+        __, contours, _ = cv.findContours(mask, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
+        return contours
+    
+    def filter_contours_by_size(self,contours,lb=0,ub=9999999999999):
+        ret = []
+        for each in contours:
+            if each.shape[0] >= lb and each.shape[0] <= ub:
+                ret.append(each)
+        return ret
+    
+    def eval_centroids(self,contours):
+        ret = []
+        for each in contours:
+            M = cv.moments(each)
+            ret.append( (int(M['m10']/M['m00']),int(M['m01']/M['m00'])) )
+        return ret
+    
+    def match_template(self,img,template):
+        res = cv.matchTemplate(img,template,cv.TM_CCOEFF)
+        _,_,_,loc = cv.minMaxLoc(res)
+        return loc
         
 ''' ******************************************************
 Children Class: Screen related vision

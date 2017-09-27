@@ -23,6 +23,8 @@ else:
     cv2.createTrackbar('S lb', 'Filter Mixer', 0, 255, nullMethod)
     cv2.createTrackbar('V ub', 'Filter Mixer', 0, 255, nullMethod)
     cv2.createTrackbar('V lb', 'Filter Mixer', 0, 255, nullMethod)
+cv2.createTrackbar('Dilation', 'Filter Mixer', 0, 100, nullMethod)
+cv2.createTrackbar('Erosion', 'Filter Mixer', 0, 100, nullMethod)
     
 if (mode+1.0)%2 == 0.0:
     file = input('filename: ')
@@ -57,11 +59,20 @@ while True:
         lb1 = cv2.getTrackbarPos('H lb', 'Filter Mixer')
         lb2 = cv2.getTrackbarPos('S lb', 'Filter Mixer')
         lb3 = cv2.getTrackbarPos('V lb', 'Filter Mixer')
+    dil = cv2.getTrackbarPos('Dilation', 'Filter Mixer')
+    ero = cv2.getTrackbarPos('Erosion' , 'Filter Mixer')
     
+    dil_kern = np.ones((dil,dil),np.uint8)
+    ero_kern = np.ones((ero,ero),np.uint8)
+        
     lb = np.array([lb1,lb2,lb3])
     ub = np.array([ub1,ub2,ub3])
     
     mask = cv2.inRange(raw, lb, ub)
+    if dil != 0:
+        mask = cv2.dilate(mask, dil_kern, iterations=1)
+    if ero != 0:
+        mask = cv2.erode(mask, ero_kern, iterations=1)
     
     result = cv2.bitwise_and(raw,raw,mask=mask)
     

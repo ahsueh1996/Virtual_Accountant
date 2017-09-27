@@ -5,16 +5,27 @@ import utils
 
 class Program():
     def __init__(self):
-        pass
+        self.bondary = [(0,0),(0,0)]
+        self.anchor = (0,0)
+    
+    def set_boundary(self,boundary):
+        self.bondary = boundary
+        # for now we assume all boundary is rectangle
+        self.set_anchor(utils.rect_cent_pp(boundary[0],boundary[1]))
+    
+    def set_anchor(self,anchor):
+        self.anchor = anchor
 
     def open(self):
         pass
     
     def full_screen(self):
         ui.hotkey('win','up')
+        self.set_boundary([(0,0),ui.size()])
     
     def close(self):
         ui.hotkey('alt','f4')
+        self.set_bondary = [(0,0),(0,0)]
 
 ''' ******************************************************
 Common fields of a program
@@ -57,6 +68,12 @@ Types of Programs: Explorers
 class Explorer(Program):
     def __init__(self):
         Program.__init__(self)
+        
+    def _search(self,query):
+        ''' right after a open command the cursor is focused on
+        the search bar. For now, this function should be used with open'''
+        ui.typewrite(query)
+        ui.hotkey('enter')
     
 class Chrome(Explorer):
     def __init__(self):
@@ -66,8 +83,10 @@ class Chrome(Explorer):
         ''' opens a new tab in a new chrome window
         The profile can be selected: Default, Guest, Profile #'''
         os.system('start chrome --profile-directory="Default"')
+        # alt: 'start chrome --profile-directory="Default" "<query URL>"'
         time.sleep(2)
         self._search(query)
+        self.full_screen()
         
     def close(self):
         ''' requires that the opened tab is in focus, choose to
@@ -76,8 +95,3 @@ class Chrome(Explorer):
         new app window'''
         ui.hotkey('ctrl','w')
         
-    def _search(self,query):
-        ''' right after a open command the cursor is focused on
-        the search bar. For now, this function should be used with open'''
-        ui.typewrite(query)
-        ui.hotkey('enter')
