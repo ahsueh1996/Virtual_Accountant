@@ -16,6 +16,16 @@ def get_time():
 def get_str_time():
     return datetime2str(get_time())
 
+def get_weekday(dt_obj):
+    # 0 monday, 6 sunday
+    return dt_obj.weekday()
+
+def timedelta(days=0,hours=0,minutes=0,seconds=0):
+    return datetime.timedelta(days,(hours*60+minutes)*60+seconds,0)
+
+def rollback_time(dt_obj,timedelta):
+    return dt_obj - timedelta
+
 ''' ******************************************************
 OS
 *********************************************************'''       
@@ -42,9 +52,12 @@ def mktxt_notepad(filepath):
     ''' Focus changes to the notepad'''
     cmd_prompt("start notepad " + "'" + filepath + "'")
 
-def write_2_file(f,msg):
-    t = get_str_time()
-    f.write(t+":\t"+msg+"\n")
+def write_2_file(f,msg,no_time=False):
+    if no_time:
+        f.write(msg)
+    else:
+        t = get_str_time()
+        f.write(t+":\t"+msg+"\n")
     
 def print_with_time(msg):
     t = get_str_time()
@@ -130,3 +143,39 @@ def reverse_enumerate(iterable):
     Enumerate over an iterable in reverse order while retaining proper indexes
     """
     return itertools.zip_longest(reversed(range(len(iterable))), reversed(iterable))
+
+def pad(side,char,final_size,s):
+    fac = int((final_size - len(s))/len(char))
+    if side=='left':
+        s = char*fac + s
+    else:
+        s = s + char*fac
+    return s
+
+def has_digit(s):
+    for char in s:
+        if char.isdigit():
+            return True
+    return False
+
+''' ******************************************************
+Threading
+*********************************************************'''
+import threading
+T_LOCK = threading.Lock()
+
+''' ******************************************************
+Threading
+*********************************************************'''
+import pickle
+
+def pickle_sto(savepath,filename,data):
+    f = open(savepath+filename,'wb')
+    pickle.dump(data,f)
+    f.close()
+
+def pickle_get(savepath,filename):
+    f = open(savepath+filename,'rb')
+    pickle.load(f,encoding='latin-1')
+    f.close()
+    
