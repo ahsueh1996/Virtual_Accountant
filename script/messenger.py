@@ -128,9 +128,11 @@ class GroupMe_Web(Messenger):
             # use helper to test for new messages
             self.get_new_msgs_helper(index)
             data = utils.read_txt('../database/files/$temp.txt')
-            subset = data[-3:]
+            subset = data[-4:]
             if self.my_username in subset:
-                return
+                self.loggings.log('No new message in '+convo_name)
+                new_msgs[convo_name] = []
+                continue
             # The test returned false meaning that no ack was put out
             # Run sequence again but this time process it for new messages
             self.get_new_msgs_helper(index,ack=True)
