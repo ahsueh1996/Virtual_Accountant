@@ -8,7 +8,7 @@ class Cortex(Loggable):
         self.subscriptions = []
         self.skull = None
         self.name = name
-        self.set_obj_id(self.class_name+'.'+name)
+        self.loggings.set_obj_id(self.class_name+'.'+name)
     
     def fire(self,data):
         ''' Cortex specific function '''
