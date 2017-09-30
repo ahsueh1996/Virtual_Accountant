@@ -65,7 +65,7 @@ class Collector(Cortex):
                 else:
                     meta['medium'] = 'txt'
                     utils.mktxt('../database/files/',rec_time_str+'-raw_text.txt',log=0)
-                    utils.write2file(line,no_time=True)
+                    utils.write_2_file(line,no_time=True)
                 utils.pickle_sto('../database/files/',rec_time_str+'-meta.pkl',meta)
                 rec_array.append(rec_time)
         self.skull.publish(self.name,rec_array)
