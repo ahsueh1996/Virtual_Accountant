@@ -11,7 +11,7 @@ class Soul(Cortex):
         self.delay = eval(defines['delay'])
         
     def fire(self,data):
-        self.loggings.log('Fired; sleeping 5s')
+        self.loggings.log('Fired; sleeping %d' %self.delay)
         time.sleep(self.delay)
         self.loggings.log('Publish')
         self.skull.publish(self.name,None)

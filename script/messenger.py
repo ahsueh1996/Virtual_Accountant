@@ -46,6 +46,7 @@ class GroupMe_Web(Messenger):
         self.textbox_cent = utils.rect_cent_pp(self.textbox_pp[0],self.textbox_pp[1])
         
         self.delay = utils.parse_numbers(defines['delay'])[0]
+        self.short_delay = utils.parse_numbers(defines['short_delay'])[0]
         
         self.convos_pp = utils.parse_pp(defines['convos_pp'])
         self.convo_templates = []
@@ -71,56 +72,68 @@ class GroupMe_Web(Messenger):
         loc = self.screen.match_template(self.screen.cvtPIL2np(self.screen.sample()),self.convo_templates[index])
         ui.click(loc[0]+20, loc[1]+20, clicks=1, button='left')
         time.sleep(self.delay)
+        
+    def get_new_msgs_helper(self,index,ack=False):
+        # open the conversation
+        self.open()
+        time.sleep(self.delay)
+        self.open_convo(index)
+        # collection
+        # focus on message box
+        ui.click(self.messages_cent[0],self.messages_cent[1],clicks=1,button='left')
+        time.sleep(self.delay)
+        # scroll up at least far enough: 2 load older message actions (4 pg up keys each)
+        for i in range(2*4):
+            ui.hotkey('pgup')
+            time.sleep(self.short_delay)
+        # select all and copy
+        ui.hotkey('ctrl','a')
+        ui.hotkey('ctrl','c')
+        # send acknowledgement only if necessary
+        if ack:
+            self.send_msg(self.flag_msg)
+        # destroy window
+        self.close()
+        # record the batch
+        # make raw txt file with notepad to convert it to ASCII encoding while
+        # maintaining the original new line characters. If we do it through
+        # pasting the clipboard to python and converting the encoding in the shell
+        # it gives strange extra new line characters.
+        utils.mktxt_notepad('../database/files/$temp.txt')
+        time.sleep(self.short_delay)
+        # we made sure that this file was not existent before so we expect a 'create
+        # new file prompt' from notepad
+        ui.hotkey('enter')
+        time.sleep(self.short_delay)
+        # just in case the file existed and had things, paste over everything
+        ui.hotkey('ctrl','a')
+        ui.hotkey('ctrl','v')
+        # randomly we get a ending of space\n\n, so take them out
+        ui.hotkey('backspace')
+        ui.hotkey('backspace')
+        ui.hotkey('backspace')
+        ui.hotkey('ctrl','s')
+        time.sleep(self.short_delay)
+        # here a warning apears about losing some characters when converting to
+        # ASCII/ANSI. enter to confirm
+        ui.hotkey('enter')
+        ui.hotkey('alt','f4')
+        time.sleep(self.short_delay)
+        ui.hotkey('s')
     
     def get_new_msgs(self):
         self.loggings.log('Fetching new messages')
         new_msgs = {}
         for index,convo_name in enumerate(self.convo_names):
-            # open the conversation
-            self.open()
-            self.open_convo(index)
-            # collection
-            # focus on message box
-            ui.click(self.messages_cent[0],self.messages_cent[1],clicks=1,button='left')
-            time.sleep(self.delay)
-            # scroll up at least far enough: 2 load older message actions (4 pg up keys each)
-            for i in range(2*4):
-                ui.hotkey('pgup')
-                time.sleep(self.delay)
-            # select all and copy
-            ui.hotkey('ctrl','a')
-            time.sleep(self.delay)
-            ui.hotkey('ctrl','c')
-            # send acknowledgement
-            self.send_msg(self.flag_msg)
-            # destroy window
-            self.close()
-            # record the batch
-            # make raw txt file with notepad to convert it to ASCII encoding while
-            # maintaining the original new line characters. If we do it through
-            # pasting the clipboard to python and converting the encoding in the shell
-            # it gives strange extra new line characters.
-            utils.mktxt_notepad('../database/files/$temp.txt')
-            time.sleep(self.delay)
-            # we made sure that this file was not existent before so we expect a 'create
-            # new file prompt' from notepad
-            ui.hotkey('enter')
-            time.sleep(self.delay)
-            # just in case the file existed and had things, paste over everything
-            ui.hotkey('ctrl','a')
-            ui.hotkey('ctrl','v')
-            # randomly we get a ending of space\n\n, so take them out
-            ui.hotkey('backspace')
-            ui.hotkey('backspace')
-            ui.hotkey('backspace')
-            ui.hotkey('ctrl','s')
-            time.sleep(self.delay)
-            # here a warning apears about losing some characters when converting to
-            # ASCII/ANSI. enter to confirm
-            ui.hotkey('enter')
-            ui.hotkey('alt','f4')
-            time.sleep(self.delay)
-            ui.hotkey('s')
+            # use helper to test for new messages
+            self.get_new_msgs_helper(index)
+            data = utils.read_txt('../database/files/$temp.txt')
+            subset = data[-3:]
+            if self.my_username in subset:
+                return
+            # The test returned false meaning that no ack was put out
+            # Run sequence again but this time process it for new messages
+            self.get_new_msgs_helper(index,ack=True)
             # read txt and return only the new_msgs as an array of strings
             data = utils.read_txt('../database/files/$temp.txt')
             temp_msgs = data
@@ -146,7 +159,9 @@ class GroupMe_Web(Messenger):
         return s in self.usernames
         
     def is_timestamp(self,s):
-        return ('AM' in s[-3:] or 'PM' in s[-3:]) and len(s)<17 and (':' in s)
+        normal = ('AM' in s[-3:] or 'PM' in s[-3:]) and len(s)<17 and (':' in s)
+        special = (not 'Sent' in s)
+        return normal and special
     
     def parse_timestamp(self,s):
         ''' return it in yyyy MM dd hh mm ss'''
