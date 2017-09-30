@@ -16,16 +16,13 @@ from cortex import Skull
 from soul import *
 from collector import *
 ''' set up cortex and skull'''
-collector = Collector(screen,['Default','Cortex'])
+collector = Collector(screen)
 cortex_list = [Soul(),collector]
 skull = Skull(cortex_list)
 for each in cortex_list:
     each.set_skull(skull)
 collector.subscribe(['SOUL'])
-print(skull.pubsub_matrix)
 ''''''
-
-
 
 ''' RUN '''
 skull.operate()

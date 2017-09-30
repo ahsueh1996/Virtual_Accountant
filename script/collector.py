@@ -6,7 +6,7 @@ class Collector(Cortex):
     ''' The collector's job is to make a metadata file and raw data files on disk
     for the next cortex to process. Array recording which files were added will be
     published using the skull (see cortex super class) to the subscribers.'''
-    def __init__(self,screen,logging_groups):
+    def __init__(self,screen,logging_groups = ['Default','Cortex']):
         Cortex.__init__(self,'Collector',logging_groups)
         
         # Current collection platform
