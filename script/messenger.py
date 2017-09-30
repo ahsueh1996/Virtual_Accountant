@@ -177,6 +177,7 @@ class GroupMe_Web(Messenger):
             else:
                 # some weekday was specified, it means the previous x day
                 MON, TUE, WED, THU, FRI, SAT, SUN = (0,1,2,3,4,5,6)
+                Mon, Tue, Wed, Thu, Fri, Sat, Sun = (0,1,2,3,4,5,6)
                 # grab the specified weekday
                 timestamp_day = eval(date_info)
                 # calculate how many days ago that must be
