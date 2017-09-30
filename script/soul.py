@@ -1,5 +1,6 @@
 from cortex import Cortex
 import time
+import utils
 
 class Soul(Cortex):
     def __init__(self,logging_groups=['Default','Cortex']):
