@@ -57,7 +57,7 @@ class Collector(Cortex):
                 if line == 'Avatar':
                     continue
                 rec_time = utils.get_str_time()
-                rec_time_str = utils.datetime_2_str(rec_time)
+                rec_time_str = utils.datetime2str(rec_time)
                 meta['rec_time'] = rec_time_str.split('-') 
                 if line == ' ':
                     meta['medium'] = 'img'
