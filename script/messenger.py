@@ -21,9 +21,9 @@ class Messenger(Loggable):
     
     def send_msg(self,msg):
         ui.click(self.textbox_cent[0],self.textbox_cent[1],clicks=1,button='left')
-        time.sleep(1)
+        time.sleep(self.delay)
         ui.typewrite(msg)
-        time.sleep(1)
+        time.sleep(self.delay)
         ui.hotkey('enter')
     
     def close(self):
@@ -82,15 +82,16 @@ class GroupMe_Web(Messenger):
             # focus on message box
             ui.click(self.messages_cent[0],self.messages_cent[1],clicks=1,button='left')
             time.sleep(self.delay)
-            # scroll up at least far enough: 2 load older message actions (5 pg up keys each)
-            for i in range(2*5):
+            # scroll up at least far enough: 2 load older message actions (4 pg up keys each)
+            for i in range(2*4):
                 ui.hotkey('pgup')
-                time.sleep(1)
+                time.sleep(self.delay)
             # select all and copy
             ui.hotkey('ctrl','a')
+            time.sleep(self.delay)
             ui.hotkey('ctrl','c')
             # send acknowledgement
-            self.send_msg(self.flag_msg)
+#             self.send_msg(self.flag_msg)
             # destroy window
             self.close()
             # record the batch
@@ -103,12 +104,12 @@ class GroupMe_Web(Messenger):
             # we made sure that this file was not existent before so we expect a 'create
             # new file prompt' from notepad
             ui.hotkey('enter')
-            time.sleep(1)
+            time.sleep(self.delay)
             # just in case the file existed and had things, paste over everything
             ui.hotkey('ctrl','a')
             ui.hotkey('ctrl','v')
             ui.hotkey('ctrl','s')
-            time.sleep(1)
+            time.sleep(self.delay)
             # here a warning apears about losing some characters when converting to
             # ASCII/ANSI. enter to confirm
             ui.hotkey('enter')
