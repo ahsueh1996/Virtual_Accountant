@@ -184,9 +184,3 @@ class GroupMe_Web(Messenger):
         a = utils.datetime2str(now).split('-')[:-1] # [yyyy MM dd hh mm ss |splice| decimals]
         f = lambda x: x[0] if x[1] == None else x[1]
         return [f((a[0],yyyy)),f((a[1],MM)),f((a[2],dd)),f((a[3],hh)),f((a[4],mm)),f((a[5],ss))]
-
-from vision import *
-screen = Screen('test') 
-gm = GroupMe_Web(screen)
-gm.open_convo(0)
-
