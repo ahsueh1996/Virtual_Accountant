@@ -92,7 +92,7 @@ class GroupMe_Web(Messenger):
             time.sleep(self.delay)
             ui.hotkey('ctrl','c')
             # send acknowledgement
-#             self.send_msg(self.flag_msg)
+            self.send_msg(self.flag_msg)
             # destroy window
             self.close()
             # record the batch
@@ -136,7 +136,7 @@ class GroupMe_Web(Messenger):
                         if j>=0:
                             temp_msgs = [data[j]] + temp_msgs
             # delete the $temp.txt file for good practice
-#             utils.cmd_prompt("cd ../database/files & del $temp.txt")
+            utils.cmd_prompt("cd ../database/files & del $temp.txt")
             new_msgs[convo_name] = temp_msgs
         self.loggings.log('Returning new messages')
         # new messages get returned as a dictionary keyed by the conversation name
