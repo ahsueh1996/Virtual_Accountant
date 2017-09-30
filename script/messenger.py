@@ -30,7 +30,7 @@ class Messenger(Loggable):
         pass
 
 class GroupMe_Web(Messenger):
-    def __init__(self,screen,logging_groups = ['Default']):
+    def __init__(self,screen,logging_groups):
         Messenger.__init__(self, logging_groups,screen)
         self.class_name += ".GroupMe_Web"
         self.loggings.set_obj_id(self.class_name)

@@ -1,10 +1,14 @@
 import utils
+from loggings import *
 
-class Cortex():
-    def __init__(self,name):
+class Cortex(Loggable):
+    def __init__(self,name,logging_groups):
+        Loggable.__init__(self, logging_groups)
+        self.class_name = "Cortex"
         self.subscriptions = []
         self.skull = None
         self.name = name
+        self.set_obj_id(self.class_name+'.'+name)
     
     def fire(self,data):
         ''' Cortex specific function '''
@@ -46,7 +50,6 @@ class Skull():
         self.namemap = {} # maps cortex names to indicies
         for i,each in enumerate(cortexes):
             self.namemap[each.name] = i
-            each.set_skull = self
         self.soul = cortexes[self.namemap['SOUL']]
         self.pubsub_matrix = np.zeros((i+1,i+1)) # row (pub): col (sub)
         self.publish_queue = queue.Queue()
@@ -74,3 +77,8 @@ class Skull():
     def publish(self,name,data):
         self.publish_queue.put((name,data))
     
+    def subscribe(self,name,array):
+        col = self.namemap[name]
+        for each in array:
+            row = self.namemap[each]
+            self.pubsub_matrix[row][col] = 1

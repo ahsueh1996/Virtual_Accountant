@@ -6,11 +6,11 @@ class Collector(Cortex):
     ''' The collector's job is to make a metadata file and raw data files on disk
     for the next cortex to process. Array recording which files were added will be
     published using the skull (see cortex super class) to the subscribers.'''
-    def __init__(self,screen):
-        Cortex.__init__(self,'Collector')
+    def __init__(self,screen,logging_groups):
+        Cortex.__init__(self,'Collector',logging_groups)
         
         # Current collection platform
-        self.platform = GroupMe_Web(screen)
+        self.platform = GroupMe_Web(screen,logging_groups)
         
         # The following is parsing the defines.txt to get the app specific data
         defines = utils.parse_defines(utils.read_txt("../database/cortex/collector.txt"))
@@ -21,6 +21,7 @@ class Collector(Cortex):
                  'platform': None, 'convo_name': None, 'medium': None}
         
     def fire(self,data):
+        self.loggings.log('Fire')
         rec_array = []
         new_msgs_dict = self.platform.get_new_msgs()
         meta = self.default_meta()
