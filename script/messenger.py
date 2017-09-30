@@ -115,6 +115,7 @@ class GroupMe_Web(Messenger):
             # ASCII/ANSI. enter to confirm
             ui.hotkey('enter')
             ui.hotkey('alt','f4')
+            ui.hotkey('y')
             # read txt and return only the new_msgs as an array of strings
             data = utils.read_txt('../database/files/$temp.txt')
             temp_msgs = data
