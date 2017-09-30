@@ -9,7 +9,7 @@ set_logging_groups(lgs)
 
 from vision import *
 ''' set up i/o '''
-screen = Screen('Primary')
+screen = Screen('Primary', ['Default','Vision'])
 ''''''
 
 from cortex import Skull
