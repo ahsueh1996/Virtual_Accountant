@@ -73,6 +73,7 @@ class GroupMe_Web(Messenger):
         time.sleep(self.delay)
     
     def get_new_msgs(self):
+        self.loggings.log('Fetching new messages')
         new_msgs = {}
         for index,convo_name in enumerate(self.convo_names):
             # open the conversation
@@ -131,6 +132,7 @@ class GroupMe_Web(Messenger):
             # delete the $temp.txt file for good practice
             utils.cmd_prompt("cd ../database/files & del $temp.txt")
             new_msgs[convo_name] = temp_msgs
+        self.loggings.log('Returning new messages')
         # new messages get returned as a dictionary keyed by the conversation name
         return new_msgs
     
@@ -138,7 +140,7 @@ class GroupMe_Web(Messenger):
         return s in self.usernames
         
     def is_timestamp(self,s):
-        return ('AM' in s[-3] or 'PM' in s[-3]) and len(s)<17 and (':' in s)
+        return ('AM' in s[-3:] or 'PM' in s[-3:]) and len(s)<17 and (':' in s)
     
     def parse_timestamp(self,s):
         ''' return it in yyyy MM dd hh mm ss'''
