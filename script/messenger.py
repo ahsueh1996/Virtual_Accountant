@@ -109,6 +109,10 @@ class GroupMe_Web(Messenger):
             # just in case the file existed and had things, paste over everything
             ui.hotkey('ctrl','a')
             ui.hotkey('ctrl','v')
+            # randomly we get a ending of space\n\n, so take them out
+            ui.hotkey('backspace')
+            ui.hotkey('backspace')
+            ui.hotkey('backspace')
             ui.hotkey('ctrl','s')
             time.sleep(self.delay)
             # here a warning apears about losing some characters when converting to
